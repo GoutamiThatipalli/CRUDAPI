@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Registration</title>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <style>
+					 form{
+					 align:center;
+					 border:1px solid #ccc;
+					 border-radius:10px;
+					 width:30%;
+					 margin:20px auto 0px;
+					 padding:20px;
+					 box-shadow: 0 4px 8px 0 rgba(0,0,0,0.2), 0 6px 20px 0 rgba(0,0,0,0.19);
+					 }
+					 
+        </style>
+     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+    </head>
+    <body>
+    <script>
+    
+    jQuery(document).ready(function(){
+    	
+        jQuery('.register-form').submit(function(event){ 
+            event.preventDefault();
+          	var data={};
+	    	data.userid=$("#userid").val();
+	    	data.password=$("#password").val();
+	    	data.mobileno=$("#mobile").val();
+	    	data.email= $("#email").val(); 
+	    	data.city = $("#city").val(); 
+	    	data.pincode = $("#pincode").val();
+		    $.ajax({
+		    	type: "POST",
+		    	url: "http://localhost:8081/CRUDAPI/rest/student-mgmt/student",
+		        data: JSON.stringify(data),
+		        dataType: "json", 	
+		        crossOrigin: true,
+		        contentType: 'application/json'
+			    }).done(function (data,status) {
+			            alert(data.message); 
+			    }).fail(function (xhr, textStatus, error) {
+			    	alert("Failed to Insert");
+			    }); 
+		   	return false;
+        }); 
+    });
+   </script>        
+   <div class="container">
+   <input type="button" class="btn btn-primary" value="Back"></div>
+        <div class="container">
+        <form name="form" class="register-form">
+        <h1 class="text-primary">Register yourself!</h1><br/>
+		<input type="text" id="userid" class="form-control" name="userid" required="required"  placeholder="Type your Name" required autofocus><br/>
+        <input type="password" id="password" class="form-control" name="password" placeholder="Type your Password" required minlength="8"><br/>
+        <input type="text" id="mobile" class="form-control" name="mobile" placeholder="Type your Mobile no" required pattern="([9]|[8]|[7])[0-9]{9}" title="Enter valid digit mobile number"><br/>
+        <input type="email" id="email" class="form-control" name="email" placeholder="Type your emailid" required><br/>
+        <input type="text" id="city" class="form-control" name="city" placeholder="Type your City" required><br/>
+        <input type="text" id="pincode" class="form-control" name="pincode" placeholder="Type your Pincode" required pattern="[\d]{6}" title="Invalid pincode"><br/>
+        <input type="Submit" class="btn btn-primary btn-block" value="Signup">
+        </form>
+        </div>
+    </body>
+</html>

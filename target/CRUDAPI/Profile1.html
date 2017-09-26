@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+<style>
+input.hidden {
+	position: absolute;
+	left: -9999px;
+}
+
+#profile-image1 {
+	cursor: pointer;
+	width: 100px;
+	height: 100px;
+	border: 2px solid #03b1ce;
+}
+
+.tital {
+	font-size: 16px;
+	font-weight: 500;
+}
+
+.bot-border {
+	border-bottom: 1px #f8f8f8 solid;
+	margin: 5px 0 5px 0
+}
+</style>
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+	 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+	 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<body>
+ <script>
+jQuery(document).ready(function(){          
+		    $.ajax({
+		    	type: "GET",
+		    	url: "http://localhost:8081/CRUDAPI/rest/student-mgmt/student/profile",
+		        dataType: "json", 	
+		        crossOrigin: true,
+		        contentType: 'application/json'
+			    }).done(function (data,status) {			    	
+			    	var str = '';			    	
+			  		str +='<div class="col-sm-6">';
+			  		str +='<h3 style="color: #00b1b1;width: 400px;">'+data.userid+'</h3><div>';
+			  		str +='<div class="clearfix"></div>';
+			  		str +='<hr style="margin: 5px 0 5px 0;">';
+			  		str +='<div class="col-sm-5 col-xs-6 tital ">User Name:</div>';
+			  		str +='<div class="col-sm-7 col-xs-6 "><label>'+data.userid+'</label></div>';
+			  		str +='<div class="clearfix"></div>';
+			  		str +='<div class="bot-border"></div>';
+			  		str +='<div class="col-sm-5 col-xs-6 tital ">Password</div>';
+			  		str +='<div class="col-sm-7 col-xs-6 ">'+data.password+'</div>';
+			  		str +='<div class="clearfix"></div>';
+			  		str +='<div class="bot-border"></div>';
+			  		str +='<div class="col-sm-5 col-xs-6 tital ">Mobileno</div>';
+			  		str +='<div class="col-sm-7 col-xs-6 ">'+data.mobileno+'</div>';
+			  		str +='<div class="clearfix"></div>';
+			  		str +='<div class="bot-border"></div>';
+			  		str +='<div class="col-sm-5 col-xs-6 tital ">Emailid</div>';
+			  		str +='<div class="col-sm-7 col-xs-6 ">'+data.email+'</div>';
+			  		str +='<div class="clearfix"></div>';
+			  		str +='<div class="bot-border"></div>';
+			  		str +='<div class="col-sm-5 col-xs-6 tital ">City</div>';
+			  		str +='<div class="col-sm-7 col-xs-6 ">'+data.city+'</div>';
+			  		str +='<div class="clearfix"></div>';
+			  		str +='<div class="bot-border"></div>';
+			  		str +='<div class="col-sm-5 col-xs-6 tital ">Pincode</div>';
+			  		str +='<div class="col-sm-7 col-xs-6 ">'+data.pincode+'</div>';
+			  		str +='<div class="clearfix"></div>';
+			  		str +='<div class="bot-border"></div>';
+			  		
+			  		$('#profile').html(str);
+			    })
+});
+</script>
+
+	<div class="container" align="center" style="width: 500px">
+		<div class="row">
+
+
+			<div class="col-md-7 ">
+
+				<div class="panel panel-default" style="width: 500px">
+					<div class="panel-heading">
+						<h4>User Profile</h4>
+					</div>
+					<div class="panel-body">
+
+						<div class="box box-info">
+
+							<div class="box-body">
+								<div class="col-sm-6">
+									<div align="center" style="width: 420px">
+										<img alt="User Pic"
+											src="https://x1.xingassets.com/assets/frontend_minified/img/users/nobody_m.original.jpg"
+											id="profile-image1" class="img-circle img-responsive">
+
+										<input id="profile-image-upload" class="hidden" type="file">
+										<div style="color: #999;"></div>
+
+									</div>
+									<div id="profile" style="width: 800px"></div>
+
+									<br>
+									<!-- /input-group -->
+								</div>
+								<!-- /.box-body -->
+							</div>
+							<!-- /.box -->
+
+						</div>
+
+
+					</div>
+				</div>
+			</div>
+			</div>
+			</div>
+</body>
+</html>

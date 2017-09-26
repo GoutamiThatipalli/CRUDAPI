@@ -1,0 +1,172 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Display</title>
+
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery-cookie/1.4.1/jquery.cookie.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+<style>
+					 body{
+					 width:1020px;
+					 margin:0px auto 0px
+					 }
+					 .formfield{
+					 width:120px;}
+					 
+</style>
+
+</head>
+<body>
+<nav class="navbar navbar-inverse">
+  <div class="container-fluid">
+    <ul class="nav navbar-nav">
+      <li><a href="display.html">DISPLAY </a></li>
+      <li><a href="Profile1.html">PROFILE </a></li>
+      <li><a href="Register.html">ADD NEW USER</a></li>
+    </ul>
+    <button class="btn btn-danger navbar-btn pull-right" onclick="logout()">Logout</button>
+  </div>
+</nav>
+
+<script type="text/javascript">
+	function logout(){
+		var url= 'http://localhost:8081/CRUDAPI/rest/student-mgmt/student/logout';
+	    var x =$.ajax({
+	        url: url,
+	        crossOrigin: true,
+	        type: 'DELETE',
+	        dataType: 'json',
+	       accept: 'application/json'
+	    	
+	    }).done(function (data) {
+	    	$.cookie('x-auth-token', '', { expires: 0, path: '/CRUDAPI/rest/student-mgmt/student'});
+	    	window.location.href="index.jsp";
+	    })
+		
+	}
+    
+    var ajaxData; 
+    $(document).ready(function(){
+       
+        	var url= 'http://localhost:8081/CRUDAPI/rest/student-mgmt/student';
+            var x =$.ajax({
+                url: url,
+                crossOrigin: true,
+                type: 'GET',
+                dataType: 'json',
+               accept: 'application/json'
+            }).done(function (data) {
+            	if(data.status=="OK" ){          	
+            	ajaxData = data;
+            	var str = '';
+            	str += '<table class="table table-bordered table-striped">';
+            	str += '<thead><tr align=center class="active" >';
+            	str += '<th>User</th>';
+            	str += '<th>Password</th>';
+            	str += '<th>Mobileno</th>';
+            	str += '<th>Email</th>';
+            	str += '<th>City</th>';
+            	str += '<th>Pincode</th>';
+            	str += '<th colspan=2 >Events</th>'
+            	str += '</tr></thead>';
+            	
+            	str += '<tbody>';
+            	$.each(data.data, function(i, obj){
+					var uid=obj.userid;
+        
+            		str += '<tr>';
+            		str += '<td> <input type="text" class="formfield" data-key="userid" value="'+obj.userid+'" /></td>';
+            		str += '<td> <input type="password" class="formfield" data-key="password" value="'+obj.password+'" /></td>';
+            		str += '<td> <input type="text" class="formfield" data-key="mobileno" value="'+obj.mobileno+'" /></td>';
+            		str += '<td> <input type="text" class="formfield" data-key="email" value="'+obj.email+'" /></td>';
+            		str += '<td> <input type="text" class="formfield" data-key="city" value="'+obj.city+'" /></td>';
+            		str += '<td> <input type="text" class="formfield" data-key="pincode" value="'+obj.pincode+'" /></td>';
+            		str +='<td>'+'<button class="btn btn-primary active" id="editBtn" >Edit</button>'+'</td>';
+            		str +='<td><button data-id="'+uid+'" class="btn btn-danger" id="deleteBtn">Delete</button></td>';
+            		str += '</tr>';
+            	
+            	});
+            	str += '</tbody>';
+            	str += '</table>';
+            	$('#tableDiv').html(str);
+            	$( "#tableDiv tbody tr #editBtn" ).on( "click", function(e) {
+            		  var targetElmt = e.target;
+            		  var trElmt = targetElmt.closest("tr");
+            		  console.log(trElmt);
+            		  var dataObj = {};
+            		  $(trElmt).find('.formfield').each(function(){
+            			  dataObj[$(this).data("key")] = $(this).val();
+            		  });
+            		  if (confirm("Do you want to edit")){
+            		  edit(dataObj);
+            		  }
+            		  else{
+              			window.location.href="display.html";
+              		}
+            		  
+            	});
+            	$( "#tableDiv tbody tr #deleteBtn" ).on( "click", function(e) {
+            		var targetElmt = e.target;
+            		console.log($(targetElmt).data("id"));
+            		if (confirm("Do you want to delete")){
+            			delet($(targetElmt).data("id"));
+            		    }
+            		else{
+            			window.location.href="display.html";
+            		}
+          		  
+          		});
+            	
+            
+            	}
+            	else
+            		{
+            		window.location.href="index.jsp";
+            		}
+            	})
+   
+            
+    });
+    
+    function delet(id){
+    
+    	var url= 'http://localhost:8081/CRUDAPI/rest/student-mgmt/student/'+id;
+        var x =$.ajax({
+            url: url,
+            crossOrigin: true,
+            type: 'DELETE',
+            dataType: 'json',
+           accept: 'application/json'
+        	
+        }).done(function (data) {
+        	 
+        	alert(data.message);
+        	window.location.href="display.html";
+        })
+    	
+    }
+     
+    function edit(dataObj){
+    	var url= 'http://localhost:8081/CRUDAPI/rest/student-mgmt/student/'+dataObj.userid;
+        $.ajax({
+            url: url,    
+            crossOrigin: true,
+            type: 'PUT',
+            dataType: 'json',
+            contentType: 'application/json',
+           data : JSON.stringify(dataObj)
+           
+        }).done(function (data,status) {
+        	alert(data.message);
+        	});
+         	
+    }
+</script>
+<div id="tableDiv" class="table-responsive"></div>
+</body>
+</html>
